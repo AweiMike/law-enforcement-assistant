@@ -7,7 +7,6 @@ const { lookupViolation, getFineAmount, getFineType } = require('../data/violati
 function getVehicleLabel(id) {
     const labels = {
         light_moto: '輕型機車',
-        mini_moto: '小型輕型機車',
         heavy_moto: '普通重型機車',
         super_moto: '大型重型機車',
         small_car: '小型車',
@@ -148,14 +147,14 @@ module.exports = async function HandleUnlicensed(context) {
         await context.replyFlex(
             '駕照違規速查 - 選擇車種',
             createSelection('駕照違規速查 (1/5)', '請選擇駕駛車種', [
-                { label: '🛵 小型輕型機車', data: 'ul_v_mini_moto' },
-                { label: '🛵 普通輕型機車', data: 'ul_v_light_moto' },
+                { label: '🛵 輕型機車', data: 'ul_v_light_moto' },
                 { label: '🏍️ 普通重型機車', data: 'ul_v_heavy_moto' },
                 { label: '🏍️ 大型重型機車', data: 'ul_v_super_moto' },
                 { label: '🚗 小型車', data: 'ul_v_small_car' },
                 { label: '🚚 大貨車', data: 'ul_v_truck' },
                 { label: '🚌 大客車', data: 'ul_v_bus' },
                 { label: '🚛 聯結車', data: 'ul_v_trailer' },
+                { label: '🚜 曳引車', data: 'ul_v_tractor' },
             ])
         );
         return;
