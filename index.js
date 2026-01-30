@@ -19,9 +19,9 @@ async function App(context) {
         text(['hi', 'hello', '開始', 'menu', '主選單'], HandleHome),
         route(context => context.event.isPostback && context.event.payload === 'action=restart', HandleHome),
 
-        // Module 1: Unlicensed
+        // Module 1: Unlicensed (multi-step flow with ul_ prefix)
         route(context => context.event.isPostback && context.event.payload.startsWith('module=unlicensed'), HandleUnlicensed),
-        route(context => context.event.isPostback && context.event.payload.startsWith('unlicensed_'), HandleUnlicensed),
+        route(context => context.event.isPostback && context.event.payload.startsWith('ul_'), HandleUnlicensed),
 
         // Module 2: Drunk Driving
         route(context => context.event.isPostback && context.event.payload.startsWith('module=drunk'), HandleDrunk),
