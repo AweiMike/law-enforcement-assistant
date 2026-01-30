@@ -123,11 +123,14 @@ const createSelection = (title, question, options) => {
  * @param {string[]} additionalCitations - Array of additional citations to issue (加開)
  * @param {string[]} annotations - Legal references/notes
  * @param {string} warnings - Warning text
+ * @param {string} summary - Optional summary of selected conditions (已選條件摘要)
  */
-const createResult = (title, article, fineText, additionalCitations, annotations, warnings) => {
-    const contents = [
-        // 條款 Section (Article)
-        {
+const createResult = (title, article, fineText, additionalCitations, annotations, warnings, summary) => {
+    const contents = [];
+
+    // 已選條件 Section (Summary) - 放在最上方
+    if (summary) {
+        contents.push({
             type: 'box',
             layout: 'vertical',
             contents: [
@@ -138,11 +141,11 @@ const createResult = (title, article, fineText, additionalCitations, annotations
                         {
                             type: 'box',
                             layout: 'vertical',
-                            contents: [{ type: 'text', text: '條款', size: 'xs', color: '#ffffff' }],
-                            backgroundColor: theme.colors.primary,
+                            contents: [{ type: 'text', text: '已選條件', size: 'xs', color: '#ffffff' }],
+                            backgroundColor: theme.colors.subtext,
                             paddingAll: 'xs',
                             cornerRadius: 'sm',
-                            width: '50px',
+                            width: '70px',
                             justifyContent: 'center',
                             alignItems: 'center',
                         },
@@ -150,95 +153,133 @@ const createResult = (title, article, fineText, additionalCitations, annotations
                 },
                 {
                     type: 'text',
-                    text: article.code,
-                    size: 'xxl',
-                    weight: 'bold',
+                    text: summary,
+                    size: 'xs',
                     color: theme.colors.text,
-                    margin: 'sm',
-                },
-                {
-                    type: 'text',
-                    text: article.description,
-                    size: 'sm',
-                    color: theme.colors.subtext,
                     wrap: true,
-                    margin: 'xs',
+                    margin: 'sm',
                 },
             ],
             margin: 'md',
-        },
-        { type: 'separator', margin: 'lg' },
+            backgroundColor: theme.colors.surface,
+            paddingAll: 'md',
+            cornerRadius: 'md',
+        });
+        contents.push({ type: 'separator', margin: 'lg' });
+    }
 
-        // 罰鍰 Section (Fine)
-        {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-                {
-                    type: 'box',
-                    layout: 'horizontal',
-                    contents: [
-                        {
-                            type: 'box',
-                            layout: 'vertical',
-                            contents: [{ type: 'text', text: '罰鍰', size: 'xs', color: '#ffffff' }],
-                            backgroundColor: theme.colors.accent,
-                            paddingAll: 'xs',
-                            cornerRadius: 'sm',
-                            width: '50px',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        },
-                    ],
-                },
-                {
-                    type: 'text',
-                    text: fineText,
-                    size: 'xl',
-                    weight: 'bold',
-                    color: theme.colors.accent,
-                    wrap: true,
-                    margin: 'sm',
-                },
-            ],
-            margin: 'lg',
-        },
-        { type: 'separator', margin: 'lg' },
+    // 條款 Section (Article)
+    contents.push({
+        type: 'box',
+        layout: 'vertical',
+        contents: [
+            {
+                type: 'box',
+                layout: 'horizontal',
+                contents: [
+                    {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [{ type: 'text', text: '條款', size: 'xs', color: '#ffffff' }],
+                        backgroundColor: theme.colors.primary,
+                        paddingAll: 'xs',
+                        cornerRadius: 'sm',
+                        width: '50px',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    },
+                ],
+            },
+            {
+                type: 'text',
+                text: article.code,
+                size: 'xxl',
+                weight: 'bold',
+                color: theme.colors.text,
+                margin: 'sm',
+            },
+            {
+                type: 'text',
+                text: article.description,
+                size: 'sm',
+                color: theme.colors.subtext,
+                wrap: true,
+                margin: 'xs',
+            },
+        ],
+        margin: 'md',
+    });
 
-        // +加開 Section (Additional Citations)
-        {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-                {
-                    type: 'box',
-                    layout: 'horizontal',
-                    contents: [
-                        {
-                            type: 'box',
-                            layout: 'vertical',
-                            contents: [{ type: 'text', text: '+加開', size: 'xs', color: '#ffffff' }],
-                            backgroundColor: theme.colors.success,
-                            paddingAll: 'xs',
-                            cornerRadius: 'sm',
-                            width: '55px',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                        },
-                    ],
-                },
-                ...additionalCitations.map((citation, idx) => ({
-                    type: 'text',
-                    text: `${idx + 1}. ${citation}`,
-                    size: 'sm',
-                    color: theme.colors.text,
-                    wrap: true,
-                    margin: idx === 0 ? 'md' : 'sm',
-                })),
-            ],
-            margin: 'lg',
-        },
-    ];
+    // 罰鍰 Section (Fine)
+    contents.push({
+        type: 'box',
+        layout: 'vertical',
+        contents: [
+            {
+                type: 'box',
+                layout: 'horizontal',
+                contents: [
+                    {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [{ type: 'text', text: '罰鍰', size: 'xs', color: '#ffffff' }],
+                        backgroundColor: theme.colors.accent,
+                        paddingAll: 'xs',
+                        cornerRadius: 'sm',
+                        width: '50px',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    },
+                ],
+            },
+            {
+                type: 'text',
+                text: fineText,
+                size: 'xl',
+                weight: 'bold',
+                color: theme.colors.accent,
+                wrap: true,
+                margin: 'sm',
+            },
+        ],
+    });
+
+    // 分隔線
+    contents.push({ type: 'separator', margin: 'lg' });
+
+    // +加開 Section (Additional Citations)
+    contents.push({
+        type: 'box',
+        layout: 'vertical',
+        contents: [
+            {
+                type: 'box',
+                layout: 'horizontal',
+                contents: [
+                    {
+                        type: 'box',
+                        layout: 'vertical',
+                        contents: [{ type: 'text', text: '+加開', size: 'xs', color: '#ffffff' }],
+                        backgroundColor: theme.colors.success,
+                        paddingAll: 'xs',
+                        cornerRadius: 'sm',
+                        width: '55px',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    },
+                ],
+            },
+            ...additionalCitations.map((citation, idx) => ({
+                type: 'text',
+                text: `${idx + 1}. ${citation}`,
+                size: 'sm',
+                color: theme.colors.text,
+                wrap: true,
+                margin: idx === 0 ? 'md' : 'sm',
+            })),
+        ],
+        margin: 'lg',
+    });
 
     // Add Annotations Section (註釋)
     if (annotations && annotations.length > 0) {

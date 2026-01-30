@@ -274,7 +274,8 @@ module.exports = async function HandleUnlicensed(context) {
                     '無需舉發',
                     ['確認駕駛人身分及駕照狀態', '依據安全規則第61條，該駕照可駕駛此車種'],
                     [LEGAL_ANNOTATIONS.referenceTable, LEGAL_ANNOTATIONS.safetyRule61],
-                    null
+                    null,
+                    buildSummary(state)
                 )
             );
 
@@ -324,7 +325,8 @@ module.exports = async function HandleUnlicensed(context) {
                 fineInfo.text,
                 citations,
                 annotations,
-                warnings
+                warnings,
+                buildSummary(state)
             )
         );
 
