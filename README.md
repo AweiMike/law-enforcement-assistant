@@ -33,16 +33,40 @@
    ```
 
 4. **正式部署**：
-   ```bash
-   npm start
-   ```
-   請確保您的伺服器有對外公開的 HTTPS URL (如使用 Ngrok)，並將 Webhook URL 設定至 LINE Developers Console。
+
+### 部署至 Vercel
+
+本專案已設定好 Vercel 部署配置 (`vercel.json` 與 `api/server.js`)。
+
+1. **推送到 GitHub/GitLab/Bitbucket**：
+   - 在您的 Git 託管服務建立一個新的 Repository。
+   - 將本專案推送到該 Repository：
+     ```bash
+     git remote add origin <您的_REPO_URL>
+     git push -u origin master
+     ```
+
+2. **在 Vercel 建立專案**：
+   - 登入 Vercel 並選擇 "Add New Project"。
+   - 匯入您剛剛建立的 Git Repository。
+   - 在 "Environment Variables" 設定中，加入：
+     - `LINE_ACCESS_TOKEN`
+     - `LINE_CHANNEL_SECRET`
+   - 點擊 "Deploy"。
+
+3. **設定 LINE Webhook**：
+   - 部署完成後，複製 Vercel 產生的 Domain (例如 `https://your-project.vercel.app`)。
+   - 到 LINE Developers Console，將 Webhook URL 設定為：
+     `https://your-project.vercel.app/webhooks/line`
+   - 開啟 "Use webhook" 功能。
 
 ## 專案結構
 
 - `src/index.js`: LINE Bot 主程式入口與路由。
 - `src/actions/`: 各模組邏輯 (unlicensed.js, drunk.js, yield.js, others.js)。
 - `src/utils/`: 工具函式 (theme.js, flex.js)。
+- `api/server.js`: Vercel Serverless Function 入口。
+- `vercel.json`: Vercel 設定檔。
 - `bottender.config.js`: Bottender 設定檔。
 
 ## 注意事項
