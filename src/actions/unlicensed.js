@@ -41,31 +41,59 @@ module.exports = async function HandleUnlicensed(context) {
         const [_, type, history] = payload.split('_');
 
         let fineRange = '';
-        let violationDetails = '';
+        let article = {};
+        let additionalCitations = [];
 
-        // Logic for Fines
+        // Logic for results with complete article references
         if (type === 'moto') {
-            violationDetails = '機車無照駕駛 (第21條)';
-            if (history === '1') fineRange = '18,000 ~ 36,000 元';
-            else if (history === '2') fineRange = '36,000 元';
-            else fineRange = '每次加罰 12,000 元 (無上限)';
+            article = {
+                code: '21條1項1款',
+                description: '未領有駕駛執照駕駛小型車或機車'
+            };
+            if (history === '1') {
+                fineRange = '機車駕駛人處18,000～36,000元罰鍰';
+            } else if (history === '2') {
+                fineRange = '機車駕駛人處36,000元罰鍰 (累犯2次)';
+            } else {
+                fineRange = '機車駕駛人處罰鍰 + 每次加罰12,000元 (無上限)';
+            }
         } else if (type === 'small') {
-            violationDetails = '小型車無照駕駛 (第21條)';
-            if (history === '1') fineRange = '36,000 ~ 60,000 元';
-            else if (history === '2') fineRange = '60,000 元';
-            else fineRange = '每次加罰 12,000 元 (無上限)';
+            article = {
+                code: '21條1項1款',
+                description: '未領有駕駛執照駕駛小型車或機車'
+            };
+            if (history === '1') {
+                fineRange = '汽車駕駛人處新臺幣36,000~60,000元罰鍰，當場移置保管車輛。';
+            } else if (history === '2') {
+                fineRange = '汽車駕駛人處60,000元罰鍰 (累犯2次)';
+            } else {
+                fineRange = '汽車駕駛人處罰鍰 + 每次加罰12,000元 (無上限)';
+            }
         } else if (type === 'big') {
-            violationDetails = '大型車無照駕駛 (第21-1條)';
-            if (history === '1') fineRange = '40,000 ~ 80,000 元';
-            else if (history === '2') fineRange = '80,000 元';
-            else fineRange = '每次加罰 24,000 元 (無上限)';
+            article = {
+                code: '21-1條1項',
+                description: '未領有駕駛執照駕駛大型車輛'
+            };
+            if (history === '1') {
+                fineRange = '駕駛人處新臺幣40,000~80,000元罰鍰，當場移置保管車輛。';
+            } else if (history === '2') {
+                fineRange = '駕駛人處80,000元罰鍰 (累犯2次)';
+            } else {
+                fineRange = '駕駛人處罰鍰 + 每次加罰24,000元 (無上限)';
+            }
         }
 
-        const sopSteps = [
-            '當場移置保管車輛 (叫拖吊車)',
-            '當場拆卸扣繳牌照 (代保管牌照)',
-            '舉發車主連坐處罰 (同額罰鍰 + 吊扣牌照)',
-            '駕駛人禁考 (1~2年)'
+        // Additional citations (加開)
+        additionalCitations = [
+            `舉發『所有人』「21條6項」：吊扣牌照，移置保管時扣繳牌照。`,
+            `舉發『所有人』「21條7項」：併處罰鍰。`
+        ];
+
+        // Legal annotations
+        const annotations = [
+            '參考資料：駕照及車種違規舉發對照表（114年11月6日修正）',
+            '依據警署交字第1150053864號：車輛所有人或受託人到場並能即時接手駕駛，得准予當場領回。',
+            '不聽制止或不服稽查，另舉發60條3項。'
         ];
 
         let warnings = '115/1/31 起無照累犯計算「重新起算」，舊紀錄不計入。';
@@ -73,10 +101,11 @@ module.exports = async function HandleUnlicensed(context) {
         await context.replyFlex(
             '無照駕駛 - 執法結果',
             createResult(
-                '執法結果：無照駕駛',
-                violationDetails,
+                '駕照違規速查',
+                article,
                 fineRange,
-                sopSteps,
+                additionalCitations,
+                annotations,
                 warnings
             )
         );

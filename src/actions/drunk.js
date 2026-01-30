@@ -7,7 +7,7 @@ module.exports = async function HandleDrunk(context) {
     if (payload === 'module=drunk') {
         await context.replyFlex(
             '酒後駕車 - 違規態樣',
-            createSelection('酒後駕車 (35條)', '請選擇違規情形', [
+            createSelection('酒後駕車 (第35條)', '請選擇違規情形', [
                 { label: '🍺 酒測超標 / 毒駕', data: 'drunk_over' },
                 { label: '🙅 拒絕檢測 (含消極不配合)', data: 'drunk_refusal' },
             ])
@@ -32,39 +32,69 @@ module.exports = async function HandleDrunk(context) {
     if (payload.startsWith('drunk_') && payload.split('_').length === 3) {
         const [_, type, accident] = payload.split('_');
 
-        let licenseAction = '';
-        let fineText = '依酒精濃度/車種裁罰基準表';
+        let fineText = '';
+        let article = {};
+        let additionalCitations = [];
 
-        // Logic
+        // Logic with complete article references
         if (type === 'refusal') {
-            licenseAction = '吊銷駕照 + 終身不得考領';
-            fineText = '180,000 元 (拒測)';
-        } else if (accident === 'severe') {
-            licenseAction = '吊銷駕照 + 終身不得考領';
-            if (type === 'over') fineText += ' + 致人重傷死亡加重';
+            article = {
+                code: '35條4項',
+                description: '拒絕接受酒精濃度測試之檢定'
+            };
+            fineText = '處新臺幣180,000元罰鍰，吊銷駕照+終身不得考領。';
+            additionalCitations = [
+                `舉發「35條9項」：扣繳牌照2年。`,
+                `舉發『所有人』(如非駕駛人本人)併處同額罰鍰。`
+            ];
         } else {
-            licenseAction = '吊扣駕照 1~4 年';
+            // 酒測超標
+            if (accident === 'severe') {
+                article = {
+                    code: '35條3項',
+                    description: '酒駕致人重傷或死亡'
+                };
+                fineText = '依酒精濃度/車種裁罰 + 加重，吊銷駕照+終身不得考領。';
+            } else if (accident === 'injury') {
+                article = {
+                    code: '35條2項',
+                    description: '酒駕致人受傷'
+                };
+                fineText = '依酒精濃度/車種裁罰，吊扣駕照2~4年。';
+            } else {
+                article = {
+                    code: '35條1項',
+                    description: '酒精濃度超過規定標準'
+                };
+                fineText = '依酒精濃度/車種裁罰基準表，吊扣駕照1~2年。';
+            }
+            additionalCitations = [
+                `舉發「35條9項」：扣繳牌照2年。`,
+                `舉發『所有人』(如非駕駛人本人)「35條10項」：併處同額罰鍰。`,
+                `駕照遭吊註銷後未再考領者，另舉發21條3項或21-1條3項。`
+            ];
         }
 
-        const sopSteps = [
-            '當場移置保管車輛 (拖吊)',
-            '當場拆卸扣繳牌照 (一律扣牌 2 年)',
-            `駕照處分：${licenseAction}`,
-            '禁駛 (若無才可由他人代駕)'
+        // Legal annotations
+        const annotations = [
+            '參考資料：駕照及車種違規舉發對照表（114年11月6日修正）',
+            '依據路監交字第1130062780號函：違反35條駕照遭吊註銷後未再考領者，另舉發21條3項或21-1條3項。',
+            '不聽制止或不服稽查，另舉發60條3項。'
         ];
 
         let warnings = '';
         if (type === 'refusal') {
-            warnings = '拒測強行抽血程序尚未上路，仍需報請檢察官核發許可書 (舊制流程)。';
+            warnings = '拒測強制抽血程序尚未上路，仍需報請檢察官核發許可書 (舊制流程)。';
         }
 
         await context.replyFlex(
             '酒後駕車 - 執法結果',
             createResult(
-                '執法結果：酒後駕車',
-                `第35條 - ${type === 'refusal' ? '拒測' : '酒測超標'} / ${accident === 'none' ? '未肇事' : (accident === 'injury' ? '致傷' : '致重傷死亡')}`,
+                '酒駕違規速查',
+                article,
                 fineText,
-                sopSteps,
+                additionalCitations,
+                annotations,
                 warnings
             )
         );

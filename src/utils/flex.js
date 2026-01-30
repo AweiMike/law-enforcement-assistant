@@ -64,14 +64,14 @@ const createMenu = () => {
                     {
                         type: 'button',
                         style: 'primary',
-                        color: theme.colors.success, // Use Green for Safety/Yield
+                        color: theme.colors.success,
                         action: { type: 'postback', label: '🚶 未禮讓/避讓 (44條)', data: 'module=yield' },
                         height: 'sm',
                     },
                     {
                         type: 'button',
-                        style: 'secondary', // Use Secondary for misc
-                        color: theme.colors.warning, // Yellow for warnings/misc
+                        style: 'secondary',
+                        color: theme.colors.warning,
                         action: { type: 'postback', label: '🔧 其他/改裝 (72條)', data: 'module=others' },
                         height: 'sm',
                     },
@@ -115,69 +115,163 @@ const createSelection = (title, question, options) => {
     );
 };
 
-// Result Card with Logic
-const createResult = (title, violationDetails, fines, sopSteps, warnings) => {
+/**
+ * Enhanced Result Card matching reference app format
+ * @param {string} title - Main title
+ * @param {object} article - { code: '21條1項1款', description: '未領有駕駛執照駕駛小型車或機車' }
+ * @param {string} fineText - Fine amount text
+ * @param {string[]} additionalCitations - Array of additional citations to issue (加開)
+ * @param {string[]} annotations - Legal references/notes
+ * @param {string} warnings - Warning text
+ */
+const createResult = (title, article, fineText, additionalCitations, annotations, warnings) => {
     const contents = [
-        // Violation Details
+        // 條款 Section (Article)
         {
             type: 'box',
             layout: 'vertical',
             contents: [
-                { type: 'text', text: '📋 違規詳情', weight: 'bold', color: theme.colors.subtext, size: 'sm' },
-                { type: 'text', text: violationDetails, size: 'md', color: theme.colors.text, wrap: true, margin: 'xs' },
-            ],
-            margin: 'md',
-        },
-        { type: 'separator', margin: 'md' },
-        // Fines (Highlighted)
-        {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-                { type: 'text', text: '💸 預估罰鍰', weight: 'bold', color: theme.colors.subtext, size: 'sm' },
+                {
+                    type: 'box',
+                    layout: 'horizontal',
+                    contents: [
+                        {
+                            type: 'box',
+                            layout: 'vertical',
+                            contents: [{ type: 'text', text: '條款', size: 'xs', color: '#ffffff' }],
+                            backgroundColor: theme.colors.primary,
+                            paddingAll: 'xs',
+                            cornerRadius: 'sm',
+                            width: '50px',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        },
+                    ],
+                },
                 {
                     type: 'text',
-                    text: fines,
-                    size: '3xl', // User requested Large Fonts
+                    text: article.code,
+                    size: 'xxl',
                     weight: 'bold',
-                    color: theme.colors.accent,
+                    color: theme.colors.text,
+                    margin: 'sm',
+                },
+                {
+                    type: 'text',
+                    text: article.description,
+                    size: 'sm',
+                    color: theme.colors.subtext,
                     wrap: true,
-                    margin: 'sm'
+                    margin: 'xs',
                 },
             ],
             margin: 'md',
         },
-        { type: 'separator', margin: 'md' },
-        // SOP Checklist
+        { type: 'separator', margin: 'lg' },
+
+        // 罰鍰 Section (Fine)
         {
+            type: 'box',
+            layout: 'vertical',
+            contents: [
+                {
+                    type: 'box',
+                    layout: 'horizontal',
+                    contents: [
+                        {
+                            type: 'box',
+                            layout: 'vertical',
+                            contents: [{ type: 'text', text: '罰鍰', size: 'xs', color: '#ffffff' }],
+                            backgroundColor: theme.colors.accent,
+                            paddingAll: 'xs',
+                            cornerRadius: 'sm',
+                            width: '50px',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        },
+                    ],
+                },
+                {
+                    type: 'text',
+                    text: fineText,
+                    size: 'xl',
+                    weight: 'bold',
+                    color: theme.colors.accent,
+                    wrap: true,
+                    margin: 'sm',
+                },
+            ],
+            margin: 'lg',
+        },
+        { type: 'separator', margin: 'lg' },
+
+        // +加開 Section (Additional Citations)
+        {
+            type: 'box',
+            layout: 'vertical',
+            contents: [
+                {
+                    type: 'box',
+                    layout: 'horizontal',
+                    contents: [
+                        {
+                            type: 'box',
+                            layout: 'vertical',
+                            contents: [{ type: 'text', text: '+加開', size: 'xs', color: '#ffffff' }],
+                            backgroundColor: theme.colors.success,
+                            paddingAll: 'xs',
+                            cornerRadius: 'sm',
+                            width: '55px',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        },
+                    ],
+                },
+                ...additionalCitations.map((citation, idx) => ({
+                    type: 'text',
+                    text: `${idx + 1}. ${citation}`,
+                    size: 'sm',
+                    color: theme.colors.text,
+                    wrap: true,
+                    margin: idx === 0 ? 'md' : 'sm',
+                })),
+            ],
+            margin: 'lg',
+        },
+    ];
+
+    // Add Annotations Section (註釋)
+    if (annotations && annotations.length > 0) {
+        contents.push({ type: 'separator', margin: 'lg' });
+        contents.push({
             type: 'box',
             layout: 'vertical',
             spacing: 'sm',
             contents: [
-                { type: 'text', text: '🚨 現場處置 SOP', weight: 'bold', color: theme.colors.subtext, size: 'sm', margin: 'xs' },
-                ...sopSteps.map(step => ({
-                    type: 'box',
-                    layout: 'horizontal',
-                    contents: [
-                        { type: 'text', text: '✅', flex: 1, size: 'sm' }, // Modern checkbox feel
-                        { type: 'text', text: step, flex: 9, size: 'md', color: theme.colors.text, wrap: true }, // Larger text
-                    ],
+                { type: 'text', text: '📌 註釋', weight: 'bold', color: theme.colors.subtext, size: 'sm' },
+                ...annotations.map((note, idx) => ({
+                    type: 'text',
+                    text: `${idx + 1}. ${note}`,
+                    size: 'xs',
+                    color: theme.colors.subtext,
+                    wrap: true,
                     margin: 'sm',
                 })),
             ],
-            margin: 'md',
-        },
-    ];
+            margin: 'lg',
+        });
+    }
 
+    // Add Warnings
     if (warnings) {
-        contents.push({ type: 'separator', margin: 'md' });
+        contents.push({ type: 'separator', margin: 'lg' });
         contents.push({
             type: 'text',
             text: `⚠️ ${warnings}`,
             color: theme.colors.warning,
             size: 'sm',
             wrap: true,
-            margin: 'md',
+            margin: 'lg',
         });
     }
 
@@ -194,7 +288,7 @@ const createResult = (title, violationDetails, fines, sopSteps, warnings) => {
         ],
     };
 
-    return createBubble(title, '執法指引結果', contents, footer);
+    return createBubble(title, null, contents, footer);
 };
 
 module.exports = {
