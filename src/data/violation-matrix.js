@@ -94,7 +94,7 @@ const VIOLATION_MATRIX = {
     // ==================== 大客車駕照 ====================
     bus: {
         super: {
-            trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
+            trailer: { article: '21條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
             bus: V, truck: V, small_car: V,
             super_moto: V, heavy_moto: V, light_moto: V, mini_moto: V,
         },
