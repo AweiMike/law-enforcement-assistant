@@ -99,20 +99,20 @@ const VIOLATION_MATRIX = {
             super_moto: V, heavy_moto: V, light_moto: V, mini_moto: V,
         },
         heavy: {
-            trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
+            trailer: { article: '21條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
             bus: V, truck: V, small_car: V,
             super_moto: { article: '22條2項', desc: '駕駛執照逾期' },
             heavy_moto: V, light_moto: V, mini_moto: V,
         },
         light: {
-            trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
+            trailer: { article: '21條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
             bus: V, truck: V, small_car: V,
             super_moto: { article: '22條2項', desc: '駕駛大型重型機車' },
             heavy_moto: { article: '22條1項6款', desc: '領有輕型機車駕駛執照，駕駛普通重型機車' },
             light_moto: V, mini_moto: V,
         },
         revoked: {
-            trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
+            trailer: { article: '21條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
             bus: V, truck: V, small_car: V,
             super_moto: { article: '21條1項3款', desc: '吊銷駕照期間駕駛機車' },
             heavy_moto: { article: '21條1項3款', desc: '吊銷駕照期間駕駛機車' },
@@ -120,7 +120,7 @@ const VIOLATION_MATRIX = {
             mini_moto: { article: '21條1項3款', desc: '吊銷駕照期間駕駛機車' },
         },
         suspended: {
-            trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
+            trailer: { article: '21條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
             bus: V, truck: V, small_car: V,
             super_moto: { article: '21條1項5款', desc: '吊扣駕照期間駕駛機車' },
             heavy_moto: { article: '21條1項5款', desc: '吊扣駕照期間駕駛機車' },
@@ -128,7 +128,7 @@ const VIOLATION_MATRIX = {
             mini_moto: { article: '21條1項5款', desc: '吊扣駕照期間駕駛機車' },
         },
         none: {
-            trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
+            trailer: { article: '21條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
             bus: V, truck: V, small_car: V,
             super_moto: { article: '22條2項', desc: '持汽車駕照駕駛大型重型機車' },
             heavy_moto: { article: '22條1項4款', desc: '持汽車駕照駕駛普通重型機車' },
@@ -141,20 +141,20 @@ const VIOLATION_MATRIX = {
     truck: {
         super: {
             trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
-            bus: { article: '21條1項4款', desc: '未領有大客車駕照駕駛大客車' },
+            bus: { article: '21-1條1項4款', desc: '未領有大客車駕照駕駛大客車' },
             truck: V, small_car: V,
             super_moto: V, heavy_moto: V, light_moto: V, mini_moto: V,
         },
         heavy: {
             trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
-            bus: { article: '21條1項4款', desc: '未領有大客車駕照駕駛大客車' },
+            bus: { article: '21-1條1項4款', desc: '未領有大客車駕照駕駛大客車' },
             truck: V, small_car: V,
             super_moto: { article: '22條2項', desc: '駕駛大型重型機車' },
             heavy_moto: V, light_moto: V, mini_moto: V,
         },
         light: {
             trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
-            bus: { article: '21條1項4款', desc: '未領有大客車駕照駕駛大客車' },
+            bus: { article: '21-1條1項4款', desc: '未領有大客車駕照駕駛大客車' },
             truck: V, small_car: V,
             super_moto: { article: '22條2項', desc: '駕駛大型重型機車' },
             heavy_moto: { article: '22條1項6款', desc: '領有輕型機車駕駛執照，駕駛普通重型機車' },
@@ -162,7 +162,7 @@ const VIOLATION_MATRIX = {
         },
         revoked: {
             trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
-            bus: { article: '21條1項4款', desc: '未領有大客車駕照駕駛大客車' },
+            bus: { article: '21-1條1項4款', desc: '未領有大客車駕照駕駛大客車' },
             truck: V, small_car: V,
             super_moto: { article: '21條1項3款', desc: '吊銷駕照期間駕駛機車' },
             heavy_moto: { article: '21條1項3款', desc: '吊銷駕照期間駕駛機車' },
@@ -171,7 +171,7 @@ const VIOLATION_MATRIX = {
         },
         suspended: {
             trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
-            bus: { article: '21條1項4款', desc: '未領有大客車駕照駕駛大客車' },
+            bus: { article: '21-1條1項4款', desc: '未領有大客車駕照駕駛大客車' },
             truck: V, small_car: V,
             super_moto: { article: '21條1項5款', desc: '吊扣駕照期間駕駛機車' },
             heavy_moto: { article: '21條1項5款', desc: '吊扣駕照期間駕駛機車' },
@@ -180,7 +180,7 @@ const VIOLATION_MATRIX = {
         },
         none: {
             trailer: { article: '21-1條1項4款', desc: '未領有聯結車駕照駕駛聯結車' },
-            bus: { article: '21條1項4款', desc: '未領有大客車駕照駕駛大客車' },
+            bus: { article: '21-1條1項4款', desc: '未領有大客車駕照駕駛大客車' },
             truck: V, small_car: V,
             super_moto: { article: '22條2項', desc: '持汽車駕照駕駛大型重型機車' },
             heavy_moto: { article: '22條1項4款', desc: '持汽車駕照駕駛普通重型機車' },
