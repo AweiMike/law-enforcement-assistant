@@ -1,11 +1,11 @@
 const { router, text, route } = require('bottender/router');
 
 // Actions (Will be created next)
-const HandleHome = require('./actions/home');
-const HandleUnlicensed = require('./actions/unlicensed');
-const HandleDrunk = require('./actions/drunk');
-const HandleYield = require('./actions/yield');
-const HandleOthers = require('./actions/others');
+const HandleHome = require('./src/actions/home');
+const HandleUnlicensed = require('./src/actions/unlicensed');
+const HandleDrunk = require('./src/actions/drunk');
+const HandleYield = require('./src/actions/yield');
+const HandleOthers = require('./src/actions/others');
 
 // Simple router to delegate based on payload
 // For complex flows, individual actions will handle their own state

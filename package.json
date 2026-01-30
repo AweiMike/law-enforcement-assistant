@@ -2,7 +2,7 @@
   "name": "traffic-enforce-bot-115",
   "version": "1.0.0",
   "description": "LINE Bot for 115 Traffic Law Enforcement",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "dev": "bottender dev",
     "start": "bottender start",
