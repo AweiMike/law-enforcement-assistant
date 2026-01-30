@@ -85,8 +85,9 @@ const VIOLATION_MATRIX = {
         none: {  // 無機車駕照
             trailer: V, bus: V, truck: V, small_car: V,
             super_moto: { article: '22條2項', desc: '持汽車駕照駕駛大型重型機車' },
-            heavy_moto: { article: '22條2項', desc: '持汽車駕照駕駛普通重型機車' },
-            light_moto: V, mini_moto: V,  // 聯結車駕照可駕輕型機車
+            heavy_moto: { article: '22條1項4款', desc: '持汽車駕照駕駛普通重型機車' },
+            light_moto: { article: '22條1項5款', desc: '領有聯結車、大客車、大貨車或小型車駕駛執照，駕駛輕型機車。但112年06月30日前已取得該汽車駕駛執照者，不在此限', note112: true },
+            mini_moto: { article: '22條1項5款', desc: '領有聯結車、大客車、大貨車或小型車駕駛執照，駕駛輕型機車。但112年06月30日前已取得該汽車駕駛執照者，不在此限', note112: true },
         },
     },
 
@@ -131,7 +132,8 @@ const VIOLATION_MATRIX = {
             bus: V, truck: V, small_car: V,
             super_moto: { article: '22條2項', desc: '持汽車駕照駕駛大型重型機車' },
             heavy_moto: { article: '22條1項4款', desc: '持汽車駕照駕駛普通重型機車' },
-            light_moto: V, mini_moto: V,
+            light_moto: { article: '22條1項5款', desc: '領有聯結車、大客車、大貨車或小型車駕駛執照，駕駛輕型機車。但112年06月30日前已取得該汽車駕駛執照者，不在此限', note112: true },
+            mini_moto: { article: '22條1項5款', desc: '領有聯結車、大客車、大貨車或小型車駕駛執照，駕駛輕型機車。但112年06月30日前已取得該汽車駕駛執照者，不在此限', note112: true },
         },
     },
 
@@ -182,7 +184,8 @@ const VIOLATION_MATRIX = {
             truck: V, small_car: V,
             super_moto: { article: '22條2項', desc: '持汽車駕照駕駛大型重型機車' },
             heavy_moto: { article: '22條1項4款', desc: '持汽車駕照駕駛普通重型機車' },
-            light_moto: V, mini_moto: V,
+            light_moto: { article: '22條1項5款', desc: '領有聯結車、大客車、大貨車或小型車駕駛執照，駕駛輕型機車。但112年06月30日前已取得該汽車駕駛執照者，不在此限', note112: true },
+            mini_moto: { article: '22條1項5款', desc: '領有聯結車、大客車、大貨車或小型車駕駛執照，駕駛輕型機車。但112年06月30日前已取得該汽車駕駛執照者，不在此限', note112: true },
         },
     },
 
@@ -239,7 +242,8 @@ const VIOLATION_MATRIX = {
             small_car: V,
             super_moto: { article: '22條2項', desc: '持汽車駕照駕駛大型重型機車' },
             heavy_moto: { article: '22條1項4款', desc: '持汽車駕照駕駛普通重型機車' },
-            light_moto: V, mini_moto: V,  // 小型車駕照(112/6/30前)可駕輕型機車
+            light_moto: { article: '22條1項5款', desc: '領有聯結車、大客車、大貨車或小型車駕駛執照，駕駛輕型機車。但112年06月30日前已取得該汽車駕駛執照者，不在此限', note112: true },
+            mini_moto: { article: '22條1項5款', desc: '領有聯結車、大客車、大貨車或小型車駕駛執照，駕駛輕型機車。但112年06月30日前已取得該汽車駕駛執照者，不在此限', note112: true },
         },
     },
 
