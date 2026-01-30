@@ -66,25 +66,25 @@ const LICENSE_ALLOWS_NEW = {
  * @param {string} vehicleType - 駕駛的車種
  * @param {string} carLicense - 汽車駕照狀態
  * @param {string} motoLicense - 機車駕照狀態
- * @returns {object} { legal: boolean, violation: string, article: string }
+ * @returns {object} { legal: boolean, violation: string, article: string, fineRange: string }
  */
 function checkDrivingLegality(vehicleType, carLicense, motoLicense) {
     const vehicle = vehicleType;
     const isMoto = ['light_moto', 'heavy_moto', 'super_moto'].includes(vehicle);
     const isLargeCar = ['truck', 'bus', 'trailer', 'tractor'].includes(vehicle);
 
-    // 檢查吊扣/吊銷狀態
+    // 檢查吊扣/吊銷狀態 (優先判斷)
     if (isMoto && motoLicense === 'suspended') {
-        return { legal: false, violation: '吊扣期間駕車', article: '21條1項4款' };
+        return { legal: false, violation: '吊扣期間駕車', article: '21條1項4款', fineType: 'standard' };
     }
     if (isMoto && motoLicense === 'revoked') {
-        return { legal: false, violation: '吊銷/註銷後駕車', article: '21條1項5款' };
+        return { legal: false, violation: '吊銷/註銷後駕車', article: '21條1項5款', fineType: 'standard' };
     }
     if (!isMoto && carLicense === 'suspended') {
-        return { legal: false, violation: '吊扣期間駕車', article: isLargeCar ? '21-1條1項4款' : '21條1項4款' };
+        return { legal: false, violation: '吊扣期間駕車', article: isLargeCar ? '21-1條1項4款' : '21條1項4款', fineType: 'standard' };
     }
     if (!isMoto && carLicense === 'revoked') {
-        return { legal: false, violation: '吊銷/註銷後駕車', article: isLargeCar ? '21-1條1項5款' : '21條1項5款' };
+        return { legal: false, violation: '吊銷/註銷後駕車', article: isLargeCar ? '21-1條1項5款' : '21條1項5款', fineType: 'standard' };
     }
 
     // 收集所有可駕駛的車種
@@ -105,38 +105,92 @@ function checkDrivingLegality(vehicleType, carLicense, motoLicense) {
 
     // 檢查是否可合法駕駛
     if (allowedVehicles.includes(vehicle)) {
-        return { legal: true, violation: null, article: null };
+        return { legal: true, violation: null, article: null, fineType: null };
     }
 
-    // 判斷違規類型
+    // ========== 判斷違規類型 ==========
+
     if (isMoto) {
-        // 機車違規
-        if (motoLicense === 'none' && carLicense === 'none') {
-            return { legal: false, violation: '無照駕駛', article: '21條1項1款' };
+        // === 機車違規 ===
+
+        // 完全無照 (21條1項1款)
+        if (motoLicense === 'none' && (carLicense === 'none' || !LICENSE_ALLOWS[carLicense]?.includes('light_moto'))) {
+            return { legal: false, violation: '無照駕駛', article: '21條1項1款', fineType: 'standard' };
         }
-        // 有其他機車駕照但越級
-        if (['light', 'heavy'].includes(motoLicense) && ['heavy_moto', 'super_moto'].includes(vehicle)) {
-            return { legal: false, violation: '越級駕駛', article: '21條1項3款' };
+
+        // 有機車駕照但越級 - 適用22條 (較輕)
+        // 22條1項6款：領有輕型機車駕駛執照，駕駛普通重型機車
+        if (motoLicense === 'light' && vehicle === 'heavy_moto') {
+            return {
+                legal: false,
+                violation: '領有輕型機車駕駛執照，駕駛普通重型機車',
+                article: '22條1項6款',
+                fineType: 'light',  // 1,800~3,600元
+                fine: '1,800 ~ 3,600 元，並禁止其駕駛。'
+            };
         }
-        // 有汽車駕照但無機車駕照
-        if (carLicense !== 'none' && motoLicense === 'none') {
-            // 112/6/30 後考領者不可騎輕型機車
-            return { legal: false, violation: '無照駕駛', article: '21條1項1款' };
+
+        // 22條1項7款：領有普通重型機車駕駛執照，駕駛大型重型機車
+        if (motoLicense === 'heavy' && vehicle === 'super_moto') {
+            return {
+                legal: false,
+                violation: '領有普通重型機車駕駛執照，駕駛大型重型機車',
+                article: '22條1項7款',
+                fineType: 'light',
+                fine: '1,800 ~ 3,600 元，並禁止其駕駛。'
+            };
         }
-        return { legal: false, violation: '無照駕駛', article: '21條1項1款' };
+
+        // 22條1項8款：領有輕型機車駕駛執照，駕駛大型重型機車
+        if (motoLicense === 'light' && vehicle === 'super_moto') {
+            return {
+                legal: false,
+                violation: '領有輕型機車駕駛執照，駕駛大型重型機車',
+                article: '22條1項8款',
+                fineType: 'light',
+                fine: '1,800 ~ 3,600 元，並禁止其駕駛。'
+            };
+        }
+
+        // 有汽車駕照(可騎輕型機車)但去騎重型/大型重型 - 22條
+        if (carLicense && LICENSE_ALLOWS[carLicense]?.includes('light_moto') && motoLicense === 'none') {
+            if (vehicle === 'heavy_moto') {
+                return {
+                    legal: false,
+                    violation: '領有輕型機車駕駛資格，駕駛普通重型機車',
+                    article: '22條1項6款',
+                    fineType: 'light',
+                    fine: '1,800 ~ 3,600 元，並禁止其駕駛。'
+                };
+            }
+            if (vehicle === 'super_moto') {
+                return {
+                    legal: false,
+                    violation: '領有輕型機車駕駛資格，駕駛大型重型機車',
+                    article: '22條1項8款',
+                    fineType: 'light',
+                    fine: '1,800 ~ 3,600 元，並禁止其駕駛。'
+                };
+            }
+        }
+
+        // 其他情況 - 無照駕駛
+        return { legal: false, violation: '無照駕駛', article: '21條1項1款', fineType: 'standard' };
+
     } else if (isLargeCar) {
-        // 大型車違規 - 適用21-1條
+        // === 大型車違規 - 適用21-1條 ===
         if (carLicense === 'none') {
-            return { legal: false, violation: '無照駕駛大型車', article: '21-1條1項1款' };
+            return { legal: false, violation: '無照駕駛大型車', article: '21-1條1項1款', fineType: 'large' };
         }
         // 持較低級別駕照
-        return { legal: false, violation: '越級駕駛大型車', article: '21-1條1項3款' };
+        return { legal: false, violation: '越級駕駛大型車', article: '21-1條1項3款', fineType: 'large' };
+
     } else {
-        // 小型車違規
+        // === 小型車違規 ===
         if (carLicense === 'none') {
-            return { legal: false, violation: '無照駕駛', article: '21條1項1款' };
+            return { legal: false, violation: '無照駕駛', article: '21條1項1款', fineType: 'standard' };
         }
-        return { legal: false, violation: '越級駕駛', article: '21條1項3款' };
+        return { legal: false, violation: '越級駕駛', article: '21條1項3款', fineType: 'standard' };
     }
 }
 
