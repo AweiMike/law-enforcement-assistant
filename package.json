@@ -1,0 +1,24 @@
+{
+  "name": "traffic-enforce-bot-115",
+  "version": "1.0.0",
+  "description": "LINE Bot for 115 Traffic Law Enforcement",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "bottender dev",
+    "start": "bottender start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "line",
+    "bot",
+    "traffic",
+    "law"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bottender": "^1.5.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.6.1"
+  }
+}
