@@ -50,6 +50,19 @@ function getMotoLicenseLabel(id) {
 }
 
 /**
+ * 取得再犯狀態標籤
+ */
+function getRecidivismLabel(id) {
+    const labels = {
+        none: '初犯 (無紀錄)',
+        within10y: '十年內再犯',
+        dui_period: '酒駕吊扣銷期間駕車',
+        both: '酒駕期間 + 十年內再犯',
+    };
+    return labels[id] || id;
+}
+
+/**
  * 建立已選條件摘要
  */
 function buildSummary(state) {
@@ -65,6 +78,9 @@ function buildSummary(state) {
     }
     if (state.isOwner !== null && state.isOwner !== undefined) {
         parts.push(`👤 車主：${state.isOwner ? '同為車主' : '非車主'}`);
+    }
+    if (state.recidivism) {
+        parts.push(`🔄 再犯：${getRecidivismLabel(state.recidivism)}`);
     }
     return parts.length > 0 ? parts.join('\n') : null;
 }
