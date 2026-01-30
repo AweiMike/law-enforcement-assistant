@@ -1,13 +1,5 @@
 const { createSelection, createResult } = require('../utils/flex');
-const {
-    VEHICLE_TYPES,
-    CAR_LICENSE_STATUS,
-    MOTO_LICENSE_STATUS,
-    LEGAL_ANNOTATIONS,
-    checkDrivingLegality,
-    getFineAmount,
-    getAdditionalCitations,
-} = require('../data/license-rules');
+const { lookupViolation, getFineAmount, getFineType } = require('../data/violation-matrix');
 
 /**
  * 取得車種標籤
@@ -15,6 +7,7 @@ const {
 function getVehicleLabel(id) {
     const labels = {
         light_moto: '輕型機車',
+        mini_moto: '小型輕型機車',
         heavy_moto: '普通重型機車',
         super_moto: '大型重型機車',
         small_car: '小型車',
@@ -78,8 +71,56 @@ function buildSummary(state) {
 }
 
 /**
+ * 法條註釋/函釋依據
+ */
+const LEGAL_ANNOTATIONS = {
+    referenceTable: '參考資料：駕照及車種違規舉發對照表（114年11月6日修正）',
+    policeDirective: '依據警署交字第1150053864號：車輛所有人或受託人到場並能即時接手駕駛，得准予當場領回。',
+    roadSupervision_21_3: '依據路監交字第1130062780號函(二)：第21條3項、第21-1條3項所稱「吊銷駕駛執照期間」，駕駛執照吊銷後未重新考領者均適用之。',
+    disobey: '不聽制止或不服稽查，另舉發60條3項。',
+    safetyRule61: '依據安全規則61條：持照可駕駛車種對照。',
+    newLawDate: '新法施行日期：115年1月31日起，無照累犯計算「重新起算」。',
+};
+
+/**
+ * 取得應加開的條款
+ */
+function getAdditionalCitations(isOwner, article, vehicleType) {
+    const isLargeCar = ['truck', 'bus', 'trailer', 'tractor'].includes(vehicleType);
+    const fineType = getFineType(article);
+    const citations = [];
+
+    // 22條較輕違規 - 只禁止駕駛
+    if (fineType === 'light') {
+        citations.push('禁止其駕駛');
+        return citations;
+    }
+
+    // 21條/21-1條 - 移置保管 + 吊扣牌照
+    citations.push('當場移置保管車輛 (禁止其駕駛)');
+
+    if (isOwner) {
+        if (isLargeCar) {
+            citations.push(`舉發「21-1條6項」：吊扣牌照，移置保管時扣繳牌照`);
+        } else {
+            citations.push(`舉發「21條6項」：吊扣牌照，移置保管時扣繳牌照`);
+        }
+    } else {
+        if (isLargeCar) {
+            citations.push(`舉發『所有人』「21-1條6項」：吊扣牌照，移置保管時扣繳牌照`);
+            citations.push(`舉發『所有人』「21-1條7項」：併處罰鍰`);
+        } else {
+            citations.push(`舉發『所有人』「21條6項」：吊扣牌照，移置保管時扣繳牌照`);
+            citations.push(`舉發『所有人』「21條7項」：併處罰鍰`);
+        }
+    }
+
+    return citations;
+}
+
+/**
  * 無照駕駛模組 - 完整版
- * 支援多步驟選擇流程，顯示已選條件
+ * 使用官方對照表 (114年11月6日修正)
  */
 module.exports = async function HandleUnlicensed(context) {
     const payload = context.event.payload;
@@ -107,14 +148,14 @@ module.exports = async function HandleUnlicensed(context) {
         await context.replyFlex(
             '駕照違規速查 - 選擇車種',
             createSelection('駕照違規速查 (1/5)', '請選擇駕駛車種', [
-                { label: '🏍️ 輕型機車', data: 'ul_v_light_moto' },
+                { label: '🛵 小型輕型機車', data: 'ul_v_mini_moto' },
+                { label: '🛵 普通輕型機車', data: 'ul_v_light_moto' },
                 { label: '🏍️ 普通重型機車', data: 'ul_v_heavy_moto' },
                 { label: '🏍️ 大型重型機車', data: 'ul_v_super_moto' },
                 { label: '🚗 小型車', data: 'ul_v_small_car' },
                 { label: '🚚 大貨車', data: 'ul_v_truck' },
                 { label: '🚌 大客車', data: 'ul_v_bus' },
                 { label: '🚛 聯結車', data: 'ul_v_trailer' },
-                { label: '🚜 曳引車', data: 'ul_v_tractor' },
             ])
         );
         return;
@@ -214,13 +255,12 @@ module.exports = async function HandleUnlicensed(context) {
         const state = { ...current, recidivism, step: 6 };
         context.setState({ unlicensed: state });
 
-        // 計算違規結果
         const { vehicleType, carLicense, motoLicense, isOwner } = state;
 
-        // 檢查合法性
-        const legality = checkDrivingLegality(vehicleType, carLicense, motoLicense);
+        // 使用對照表查詢違規結果
+        const result = lookupViolation(carLicense, motoLicense, vehicleType);
 
-        if (legality.legal) {
+        if (result.legal) {
             // 合法駕駛
             const article = {
                 code: '✅ 合法',
@@ -239,54 +279,39 @@ module.exports = async function HandleUnlicensed(context) {
                 )
             );
 
-            // 清除 state
             context.setState({ unlicensed: null });
             return;
         }
 
-        // 取得車種中文名稱
-        const vehicleLabel = getVehicleLabel(vehicleType);
-
+        // 違規駕駛
         const article = {
-            code: legality.article,
-            description: legality.violation,
+            code: result.article,
+            description: result.desc,
         };
 
-        // 根據違規類型決定罰鍰和加開條款
-        let fineText;
-        let citations;
-        let annotations;
-        let warnings = null;
+        const fineType = getFineType(result.article);
+        const fineInfo = getFineAmount(result.article, vehicleType, recidivism);
+        const citations = getAdditionalCitations(isOwner, result.article, vehicleType);
 
-        if (legality.fineType === 'light') {
-            // 22條違規 - 較輕微 (機車越級)
-            fineText = legality.fine || '1,800 ~ 3,600 元，並禁止其駕駛。';
-            citations = ['禁止其駕駛'];
-            annotations = [
-                LEGAL_ANNOTATIONS.referenceTable,
-                LEGAL_ANNOTATIONS.safetyRule61,
-            ];
-        } else {
-            // 21條/21-1條違規 - 較嚴重
-            const fineInfo = getFineAmount(vehicleType, recidivism);
-            fineText = fineInfo.text;
-            citations = getAdditionalCitations(isOwner, legality.violation, vehicleType);
+        // 根據違規類型決定註釋
+        const annotations = [LEGAL_ANNOTATIONS.referenceTable];
 
-            annotations = [
-                LEGAL_ANNOTATIONS.referenceTable,
-                LEGAL_ANNOTATIONS.policeDirective,
-            ];
+        if (fineType !== 'light') {
+            annotations.push(LEGAL_ANNOTATIONS.policeDirective);
 
-            // 如果是吊銷後駕車，加入路監交字的解釋
             if (carLicense === 'revoked' || motoLicense === 'revoked' || recidivism === 'dui_period') {
                 annotations.push(LEGAL_ANNOTATIONS.roadSupervision_21_3);
             }
 
             annotations.push(LEGAL_ANNOTATIONS.disobey);
+        } else {
+            annotations.push(LEGAL_ANNOTATIONS.safetyRule61);
+        }
 
-            // 警告訊息
+        // 警告訊息
+        let warnings = null;
+        if (fineType !== 'light') {
             warnings = LEGAL_ANNOTATIONS.newLawDate;
-
             if (recidivism === 'dui_period' || recidivism === 'both') {
                 warnings = '酒駕吊扣銷期間駕車，依21條1項2款處罰。' + warnings;
             }
@@ -297,14 +322,13 @@ module.exports = async function HandleUnlicensed(context) {
             createResult(
                 '駕照違規速查',
                 article,
-                fineText,
+                fineInfo.text,
                 citations,
                 annotations,
                 warnings
             )
         );
 
-        // 清除 state
         context.setState({ unlicensed: null });
     }
 };
