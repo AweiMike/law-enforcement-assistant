@@ -1,7 +1,8 @@
 const { router, text, route } = require('bottender/router');
 
-// Actions (Will be created next)
+// Actions
 const HandleHome = require('./src/actions/home');
+const HandleFollow = require('./src/actions/follow');
 const HandleUnlicensed = require('./src/actions/unlicensed');
 const HandleDrunk = require('./src/actions/drunk');
 const HandleYield = require('./src/actions/yield');
@@ -11,6 +12,9 @@ const HandleOthers = require('./src/actions/others');
 // For complex flows, individual actions will handle their own state
 async function App(context) {
     return router([
+        // Follow Event (User adds bot as friend)
+        route(context => context.event.isFollow, HandleFollow),
+
         // Home / Reset
         text(['hi', 'hello', '開始', 'menu', '主選單'], HandleHome),
         route(context => context.event.isPostback && context.event.payload === 'action=restart', HandleHome),
