@@ -7,6 +7,7 @@ const HandleUnlicensed = require('./src/actions/unlicensed');
 const HandleDrunk = require('./src/actions/drunk');
 const HandleYield = require('./src/actions/yield');
 const HandleOthers = require('./src/actions/others');
+const HandleTools = require('./src/actions/tools');
 
 // Simple router to delegate based on payload
 // For complex flows, individual actions will handle their own state
@@ -18,6 +19,12 @@ async function App(context) {
         // Home / Reset
         text(['hi', 'hello', '開始', 'menu', '主選單'], HandleHome),
         route(context => context.event.isPostback && context.event.payload === 'action=restart', HandleHome),
+
+        // Module: Tools (Date/Age) - Must be before text fallback
+        route(context => context.event.isPostback && context.event.payload.startsWith('module=tools'), HandleTools),
+        route(context => context.event.isPostback && context.event.payload.startsWith('action=tools_'), HandleTools),
+        // Handle text input for Age Calculator (when state.tools.mode is 'input_age')
+        route(context => context.event.isText && context.state.tools && context.state.tools.mode === 'input_age', HandleTools),
 
         // Module 1: Unlicensed (multi-step flow with ul_ prefix)
         route(context => context.event.isPostback && context.event.payload.startsWith('module=unlicensed'), HandleUnlicensed),

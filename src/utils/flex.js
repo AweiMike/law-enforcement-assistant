@@ -76,6 +76,13 @@ const createMenu = () => {
                         height: 'sm',
                     },
                     {
+                        type: 'button',
+                        style: 'secondary',
+                        color: theme.colors.subtext, // Using a neutral color for tools
+                        action: { type: 'postback', label: '🧮 執法工具 (日期/年齡)', data: 'module=tools' },
+                        height: 'sm',
+                    },
+                    {
                         type: 'separator',
                         margin: 'md',
                     },
