@@ -104,7 +104,7 @@ function createToolsBubble(ageResult = null) {
                             },
                             {
                                 type: 'text',
-                                text: `${ageResult.years}歲 ${ageResult.months}個月`,
+                                text: `${ageResult.years}歲 ${ageResult.months}個月 ${ageResult.days}天`,
                                 size: 'xxl',
                                 weight: 'bold',
                                 color: theme.colors.success,
@@ -204,7 +204,7 @@ module.exports = async function HandleTools(context) {
             return;
         }
 
-        const { years, months } = dateUtils.calculateAge(birthDate);
+        const { years, months, days } = dateUtils.calculateAge(birthDate);
 
         // Reset mode to view, but keeping result doesn't persist in state unless we want to.
         // We can just reply with the Flex Message containing the result.
@@ -215,7 +215,8 @@ module.exports = async function HandleTools(context) {
         await context.replyFlex('年齡查詢結果', createToolsBubble({
             input: input,
             years,
-            months
+            months,
+            days
         }));
     }
 };

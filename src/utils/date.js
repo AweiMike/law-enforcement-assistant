@@ -88,14 +88,17 @@ function calculateAge(birthDate) {
     if (days < 0) {
         months--;
         // 借上個月的天數來補
-        // (這裡簡化處理，如果要超精確需要知道上個月有幾天，但一般交通執法判定"歲+月"通常不用精確到小數點天)
+        // 取得上個月的最後一天
+        const prevMonthDate = new Date(today.getFullYear(), today.getMonth(), 0);
+        days += prevMonthDate.getDate();
+
         if (months < 0) {
-            months += 12; // 這種情況通常不會發生，除非邏輯有重疊，保險起見
-            // years 已經在上面處理過了
+            months += 12;
+            years--;
         }
     }
 
-    return { years, months };
+    return { years, months, days };
 }
 
 module.exports = {
