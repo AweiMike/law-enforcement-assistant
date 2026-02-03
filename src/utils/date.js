@@ -4,11 +4,19 @@
 // const moment = require('moment'); // Removed unused dependency
 
 /**
+ * 取得台灣時區的 Date 物件
+ * (伺服器可能在 UTC，此函式確保取得的是台灣當地時間的 Date 物件)
+ */
+function getTaiwanDate() {
+    return new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
+}
+
+/**
  * 取得今日的民國日期字串 (格式: 115/03/05)
  * @returns {string} e.g. "115/03/05"
  */
 function getCurrentROCDate() {
-    return formatROCDate(new Date());
+    return formatROCDate(getTaiwanDate());
 }
 
 /**
@@ -29,7 +37,7 @@ function formatROCDate(date) {
  * @returns {string} ROC Date string
  */
 function addDays(days) {
-    const date = new Date();
+    const date = getTaiwanDate();
     date.setDate(date.getDate() + days);
     return formatROCDate(date);
 }
@@ -72,7 +80,7 @@ function parseROCBirthdate(str) {
  * @returns {object} { years, months }
  */
 function calculateAge(birthDate) {
-    const today = new Date();
+    const today = getTaiwanDate();
 
     let years = today.getFullYear() - birthDate.getFullYear();
     let months = today.getMonth() - birthDate.getMonth();
