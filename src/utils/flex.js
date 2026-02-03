@@ -94,6 +94,16 @@ const createMenu = () => {
                         wrap: true,
                         margin: 'md',
                     },
+                    { type: 'separator', margin: 'md' },
+                    {
+                        type: 'text',
+                        text: '免責聲明：本系統內容無法保證完全無誤，參照作執勤用途前(如舉發、回覆申訴)，務必再次確認是否符合要件，或洽詢交通組/裁決單位。',
+                        color: '#aaaaaa',
+                        size: 'xxs',
+                        wrap: true,
+                        margin: 'md',
+                    },
+
                 ],
             },
         ]
@@ -333,6 +343,19 @@ const createResult = (title, article, fineText, additionalCitations, annotations
             margin: 'lg',
         });
     }
+
+
+
+    // Disclaimer
+    contents.push({ type: 'separator', margin: 'lg' });
+    contents.push({
+        type: 'text',
+        text: '免責聲明：本系統內容無法保證完全無誤，參照作執勤用途前(如舉發、回覆申訴)，務必再次確認是否符合要件，或洽詢交通組/裁決單位。',
+        color: '#aaaaaa',
+        size: 'xxs',
+        wrap: true,
+        margin: 'md',
+    });
 
     // Footer Button to restart
     const footer = {
