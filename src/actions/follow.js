@@ -15,7 +15,7 @@ module.exports = async function HandleFollow(context) {
             contents: [
                 {
                     type: 'text',
-                    text: '👮 115年交通執法小幫手',
+                    text: '📜 青雲律令 (Cyan Cloud Decree)',
                     size: 'xl',
                     weight: 'bold',
                     color: theme.colors.text,
@@ -30,7 +30,7 @@ module.exports = async function HandleFollow(context) {
             contents: [
                 {
                     type: 'text',
-                    text: '📢 設立緣由',
+                    text: '� 設立緣由',
                     size: 'lg',
                     weight: 'bold',
                     color: theme.colors.accent,
@@ -67,7 +67,7 @@ module.exports = async function HandleFollow(context) {
                     layout: 'vertical',
                     spacing: 'sm',
                     contents: [
-                        { type: 'text', text: '🛑 無照駕駛 (21、21-1條)', size: 'sm', color: theme.colors.text },
+                        { type: 'text', text: '� 無照駕駛 (21、21-1條)', size: 'sm', color: theme.colors.text },
                         { type: 'text', text: '🍺 酒後駕車 (35條)', size: 'sm', color: theme.colors.text },
                         { type: 'text', text: '🚶 未禮讓/未避讓 (44、45條)', size: 'sm', color: theme.colors.text },
                         { type: 'text', text: '🔧 其他違規 (改裝/慢車等)', size: 'sm', color: theme.colors.text },
@@ -90,7 +90,7 @@ module.exports = async function HandleFollow(context) {
                     type: 'button',
                     style: 'primary',
                     color: theme.colors.success,
-                    action: { type: 'postback', label: '🚀 開始使用', data: 'action=restart' },
+                    action: { type: 'postback', label: '� 開始使用', data: 'action=restart' },
                     margin: 'lg',
                     height: 'sm',
                 },
@@ -98,5 +98,5 @@ module.exports = async function HandleFollow(context) {
         },
     };
 
-    await context.replyFlex('歡迎使用執法小幫手', welcomeBubble);
+    await context.replyFlex('歡迎使用青雲律令', welcomeBubble);
 };

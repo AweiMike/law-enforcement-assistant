@@ -39,7 +39,7 @@ const createBubble = (title, subtitle, contents, footer) => {
 
 const createMenu = () => {
     return createBubble(
-        '115年交通執法小幫手',
+        '📜 青雲律令',
         '請選擇違規樣態 (適用115/1/31後新制)',
         [
             {
@@ -79,7 +79,7 @@ const createMenu = () => {
                         type: 'button',
                         style: 'secondary',
                         color: theme.colors.subtext, // Using a neutral color for tools
-                        action: { type: 'postback', label: '🧮 執法工具 (日期/年齡)', data: 'module=tools' },
+                        action: { type: 'postback', label: '🧮 輔助計算工具(年齡/到案日期)', data: 'module=tools' },
                         height: 'sm',
                     },
                     {

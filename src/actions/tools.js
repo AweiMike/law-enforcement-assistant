@@ -10,7 +10,7 @@ function createToolsBubble(ageResult = null) {
         // Header
         {
             type: 'text',
-            text: '🧮 執法工具',
+            text: '🧮 輔助計算工具',
             weight: 'bold',
             size: 'xl',
             color: theme.colors.primary,
@@ -181,7 +181,7 @@ module.exports = async function HandleTools(context) {
         context.setState({
             tools: { mode: 'view' }
         });
-        await context.replyFlex('執法工具', createToolsBubble());
+        await context.replyFlex('輔助計算工具', createToolsBubble());
         return;
     }
 
