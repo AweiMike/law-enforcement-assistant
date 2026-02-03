@@ -118,7 +118,18 @@ const createSelection = (title, question, options) => {
                     height: 'sm',
                 })),
             },
-        ]
+        ],
+        {
+            type: 'box',
+            layout: 'vertical',
+            contents: [
+                {
+                    type: 'button',
+                    style: 'link',
+                    action: { type: 'postback', label: '🏠 回主選單', data: 'action=restart' },
+                }
+            ],
+        }
     );
 };
 
