@@ -499,6 +499,46 @@ const createOverloadResult = (authorized, actual, overloadWeight, overloadPercen
         });
     }
 
+    // Legal Notes (Added based on user request)
+    contents.push({ type: 'separator', margin: 'lg' });
+    contents.push({
+        type: 'text',
+        text: '※ 註釋與判讀標準',
+        size: 'sm',
+        weight: 'bold',
+        color: theme.colors.primary,
+        margin: 'md'
+    });
+
+    const notes = [
+        '1. 核定總重怎麼判斷？',
+        '   (1) 聯結車依總聯結重、第五輪載重其中數值較低者為基準。',
+        '   (2) 其餘種類依車輛總重為基準。',
+        '   (3) 如有舉軸(輪胎舉起不落地)情形，依據交通部95.05.30.交路字第0950033500號函，請參考安全規則附件十一，依車輛落地軸數查表做為基準。',
+        '',
+        '2. 過磅原則：',
+        '   過磅時，不含駕駛人重量。',
+        '',
+        '3. 卸貨分裝及勸導：',
+        '   依據處理細則12條、13條辦理。',
+        '',
+        '4. 整體物品（不可分割）特殊規定：',
+        '   如裝載貨物為「整體物」（如工程機具、一體式建材等）：',
+        '   - 超重且「未請領」臨時通行證者：依處罰條例29條1項2款舉發（定額罰鍰）。',
+        '   - 已請領通行證，仍超出核准之重量：方得依原車核定總重舉發29-2條（累進費率）。'
+    ];
+
+    notes.forEach(note => {
+        contents.push({
+            type: 'text',
+            text: note,
+            size: 'xxs',
+            color: theme.colors.subtext,
+            wrap: true,
+            margin: 'xs'
+        });
+    });
+
     // Disclaimer
     contents.push({ type: 'separator', margin: 'lg' });
     contents.push({
