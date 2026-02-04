@@ -531,6 +531,7 @@ const createOverloadResult = (authorized, actual, overloadWeight, overloadPercen
 };
 
 module.exports = {
+    createBubble,
     createMenu,
     createSelection,
     createResult,
