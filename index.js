@@ -8,6 +8,7 @@ const HandleDrunk = require('./src/actions/drunk');
 const HandleYield = require('./src/actions/yield');
 const HandleOthers = require('./src/actions/others');
 const HandleTools = require('./src/actions/tools');
+const HandleOverload = require('./src/actions/overload');
 
 // Simple router to delegate based on payload
 // For complex flows, individual actions will handle their own state
@@ -19,6 +20,12 @@ async function App(context) {
         // Home / Reset
         text(['hi', 'hello', '開始', 'menu', '主選單'], HandleHome),
         route(context => context.event.isPostback && context.event.payload === 'action=restart', HandleHome),
+
+        // Module: Overload Calculator
+        route(context => context.event.isPostback && context.event.payload.startsWith('module=overload'), HandleOverload),
+        route(context => context.event.isPostback && context.event.payload.startsWith('overload_'), HandleOverload),
+        route(context => context.event.isPostback && context.event.payload === 'action=overload_restart', HandleOverload),
+        route(context => context.event.isText && context.state.overload && (context.state.overload.step === 'input_authorized' || context.state.overload.step === 'input_actual'), HandleOverload),
 
         // Module: Tools (Date/Age) - Must be before text fallback
         route(context => context.event.isPostback && context.event.payload.startsWith('module=tools'), HandleTools),

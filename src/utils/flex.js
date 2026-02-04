@@ -77,6 +77,13 @@ const createMenu = () => {
                     },
                     {
                         type: 'button',
+                        style: 'primary',
+                        color: '#1E90FF', // DodgerBlue
+                        action: { type: 'postback', label: '🚛 超載計算機 (29-2)', data: 'module=overload' },
+                        height: 'sm',
+                    },
+                    {
+                        type: 'button',
                         style: 'secondary',
                         color: theme.colors.subtext, // Using a neutral color for tools
                         action: { type: 'postback', label: '🧮 輔助計算工具(年齡/到案日期)', data: 'module=tools' },
@@ -373,8 +380,159 @@ const createResult = (title, article, fineText, additionalCitations, annotations
     return createBubble(title, null, contents, footer);
 };
 
+const createOverloadResult = (authorized, actual, overloadWeight, overloadPercent, result) => {
+    const isViolation = result.fine > 0;
+    const headerColor = isViolation ? theme.colors.warning : theme.colors.success;
+
+    const contents = [
+        // Status Row
+        {
+            type: 'text',
+            text: result.status,
+            size: 'xxl',
+            weight: 'bold',
+            color: headerColor,
+            align: 'center',
+            margin: 'md',
+        },
+        { type: 'separator', margin: 'md' },
+
+        // Weight Info
+        {
+            type: 'box',
+            layout: 'horizontal',
+            contents: [
+                { type: 'text', text: '核定總重', size: 'sm', color: theme.colors.subtext, flex: 1 },
+                { type: 'text', text: `${authorized} t`, size: 'sm', weight: 'bold', align: 'end', flex: 1 }
+            ],
+            margin: 'md'
+        },
+        {
+            type: 'box',
+            layout: 'horizontal',
+            contents: [
+                { type: 'text', text: '實際總重', size: 'sm', color: theme.colors.subtext, flex: 1 },
+                { type: 'text', text: `${actual} t`, size: 'sm', weight: 'bold', align: 'end', flex: 1 }
+            ],
+            margin: 'sm'
+        },
+        {
+            type: 'box',
+            layout: 'horizontal',
+            contents: [
+                { type: 'text', text: '超載重量', size: 'sm', color: theme.colors.warning, flex: 1 },
+                { type: 'text', text: `${overloadWeight > 0 ? '+' : ''}${overloadWeight.toFixed(2)} t`, size: 'sm', weight: 'bold', color: theme.colors.warning, align: 'end', flex: 1 }
+            ],
+            margin: 'sm'
+        },
+        {
+            type: 'text',
+            text: `(超載率 ${(overloadPercent * 100).toFixed(1)}%)`,
+            size: 'xs',
+            color: theme.colors.subtext,
+            align: 'end',
+            margin: 'xs'
+        },
+        { type: 'separator', margin: 'md' },
+    ];
+
+    // Fine & Action Section
+    if (result.fine > 0) {
+        contents.push({
+            type: 'box',
+            layout: 'horizontal',
+            contents: [
+                { type: 'text', text: '預估罰鍰', size: 'md', weight: 'bold', flex: 1, align: 'start' },
+                { type: 'text', text: `$${result.fine.toLocaleString()}`, size: 'xl', weight: 'bold', color: theme.colors.highlight, flex: 2, align: 'end' }
+            ],
+            margin: 'md'
+        });
+    }
+
+    if (result.points > 0) {
+        contents.push({
+            type: 'text',
+            text: `⚠️ 記違規紀錄 ${result.points} 次`,
+            size: 'sm',
+            color: theme.colors.accent,
+            align: 'end',
+            margin: 'sm'
+        });
+    }
+
+    if (result.action) {
+        contents.push({
+            type: 'text',
+            text: `處置: ${result.action}`,
+            size: 'sm',
+            weight: 'bold',
+            color: theme.colors.primary,
+            wrap: true,
+            margin: 'md'
+        });
+    }
+
+    if (result.article) {
+        contents.push({
+            type: 'text',
+            text: `條例: ${result.article}`,
+            size: 'xxs',
+            color: theme.colors.subtext,
+            wrap: true,
+            margin: 'md'
+        });
+    }
+
+    // Calculation Details (Collapsible-like visual)
+    if (result.details && result.details.length > 0) {
+        contents.push({ type: 'separator', margin: 'lg' });
+        contents.push({ type: 'text', text: '計算明細', size: 'xs', color: theme.colors.subtext, margin: 'md' });
+        result.details.forEach(detail => {
+            contents.push({
+                type: 'text',
+                text: `• ${detail}`,
+                size: 'xxs',
+                color: theme.colors.subtext,
+                wrap: true,
+                margin: 'xs'
+            });
+        });
+    }
+
+    // Disclaimer
+    contents.push({ type: 'separator', margin: 'lg' });
+    contents.push({
+        type: 'text',
+        text: '免責聲明：本系統內容無法保證完全無誤，參照作執勤用途前(如舉發、回覆申訴)，務必再次確認是否符合要件，或洽詢交通組/裁決單位。',
+        color: '#aaaaaa',
+        size: 'xxs',
+        wrap: true,
+        margin: 'md',
+    });
+
+    const footer = {
+        type: 'box',
+        layout: 'vertical',
+        contents: [
+            {
+                type: 'button',
+                style: 'link',
+                action: { type: 'postback', label: '🔄 重新計算', data: 'action=overload_restart' },
+            },
+            {
+                type: 'button',
+                style: 'link',
+                action: { type: 'postback', label: '🏠 回主選單', data: 'action=restart' },
+            }
+        ],
+    };
+
+    return createBubble('🚛 超載計算結果', null, contents, footer);
+};
+
 module.exports = {
     createMenu,
     createSelection,
     createResult,
+    createOverloadResult
 };
