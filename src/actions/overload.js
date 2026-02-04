@@ -188,31 +188,25 @@ async function calculateAndShowResult(context) {
 
             const countableOverload = Math.ceil(overloadWeight);
             const baseFine = 10000;
-            let addFine = 0;
+            let rate = 0;
 
-            // Level 1: 1-10 tons
-            const level1 = Math.min(countableOverload, 10);
-            addFine += level1 * 1000;
+            // Determine Rate based on total overload (Single Rate Tier)
+            if (countableOverload <= 10) {
+                rate = 1000;
+            } else if (countableOverload <= 20) {
+                rate = 2000;
+            } else if (countableOverload <= 30) {
+                rate = 3000;
+            } else {
+                rate = 5000;
+            }
 
-            // Level 2: 11-20 tons
-            const level2 = Math.max(0, Math.min(countableOverload, 20) - 10);
-            addFine += level2 * 2000;
-
-            // Level 3: 21-30 tons
-            const level3 = Math.max(0, Math.min(countableOverload, 30) - 20);
-            addFine += level3 * 3000;
-
-            // Level 4: > 30 tons
-            const level4 = Math.max(0, countableOverload - 30);
-            addFine += level4 * 5000;
-
+            const addFine = countableOverload * rate;
             result.fine = baseFine + addFine;
+
             result.details.push(`計費超重: ${countableOverload} 公噸 (無條件進位)`);
             result.details.push(`基礎罰鍰: $10,000`);
-            if (level1 > 0) result.details.push(`1-10噸 (x1000): $${(level1 * 1000).toLocaleString()}`);
-            if (level2 > 0) result.details.push(`11-20噸 (x2000): $${(level2 * 2000).toLocaleString()}`);
-            if (level3 > 0) result.details.push(`21-30噸 (x3000): $${(level3 * 3000).toLocaleString()}`);
-            if (level4 > 0) result.details.push(`30噸以上 (x5000): $${(level4 * 5000).toLocaleString()}`);
+            result.details.push(`加計罰鍰: ${countableOverload}t x $${rate} = $${addFine.toLocaleString()}`);
         }
     }
 
