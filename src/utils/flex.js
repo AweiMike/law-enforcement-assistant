@@ -529,6 +529,7 @@ const createOverloadResult = (authorized, actual, overloadWeight, overloadPercen
     ];
 
     notes.forEach(note => {
+        if (note.trim() === '') return; // Skip empty lines to prevent API error
         contents.push({
             type: 'text',
             text: note,
