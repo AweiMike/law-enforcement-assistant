@@ -25,11 +25,11 @@ async function HandleOverload(context) {
     const { payload } = context.event;
 
     // Route based on action
-    if (payload === 'module=overload' || payload === 'action=overload_restart') {
+    if (payload && (payload === 'module=overload' || payload === 'action=overload_restart')) {
         return await askType(context);
     }
 
-    if (payload.startsWith('overload_type=')) {
+    if (payload && payload.startsWith('overload_type=')) {
         const type = payload.split('=')[1];
         context.setState({
             overload: {
