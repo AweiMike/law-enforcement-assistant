@@ -104,7 +104,7 @@ const createMenu = () => {
                     { type: 'separator', margin: 'md' },
                     {
                         type: 'text',
-                        text: '免責聲明：本系統由「東澤」個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前，務必再次確認是否符合要件。',
+                        text: '免責聲明：本系統為個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前，務必再次確認是否符合要件。',
                         color: '#aaaaaa',
                         size: 'xxs',
                         wrap: true,
@@ -357,7 +357,7 @@ const createResult = (title, article, fineText, additionalCitations, annotations
     contents.push({ type: 'separator', margin: 'lg' });
     contents.push({
         type: 'text',
-        text: '免責聲明：本系統由「東澤」個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前，務必再次確認是否符合要件。',
+        text: '免責聲明：本系統為個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前，務必再次確認是否符合要件。',
         color: '#aaaaaa',
         size: 'xxs',
         wrap: true,
@@ -544,7 +544,7 @@ const createOverloadResult = (authorized, actual, overloadWeight, overloadPercen
     contents.push({ type: 'separator', margin: 'lg' });
     contents.push({
         type: 'text',
-        text: '免責聲明：本系統由「東澤」個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前，務必再次確認是否符合要件。',
+        text: '免責聲明：本系統為個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前，務必再次確認是否符合要件。',
         color: '#aaaaaa',
         size: 'xxs',
         wrap: true,
