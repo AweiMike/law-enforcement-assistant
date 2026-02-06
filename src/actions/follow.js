@@ -15,7 +15,7 @@ module.exports = async function HandleFollow(context) {
             contents: [
                 {
                     type: 'text',
-                    text: '📜 青雲律令 (Cyan Cloud Decree)',
+                    text: '📜 淺山執法通',
                     size: 'xl',
                     weight: 'bold',
                     color: theme.colors.text,
@@ -30,14 +30,34 @@ module.exports = async function HandleFollow(context) {
             contents: [
                 {
                     type: 'text',
-                    text: '🛠️ 系統開發與聲明',
+                    text: '📖 設立緣由',
                     size: 'lg',
                     weight: 'bold',
                     color: theme.colors.accent,
                 },
                 {
                     type: 'text',
-                    text: '本系統為「東澤」個人利用勤餘時間開發，旨在協助同仁快速查詢繁雜的交通新制。\n特別感謝「新化分局交通組、交通分隊全體同仁」協助測試與驗證。',
+                    text: '因應民國115年1月31日道路交通管理處罰條例重大修正，包含無照駕駛累犯加重、酒駕吊銷終身、未禮讓行人加重處罰等，法條複雜度大增。\n本小幫手專為第一線同仁設計，協助快速查詢新制與判定級距。',
+                    size: 'sm',
+                    color: theme.colors.text,
+                    wrap: true,
+                    margin: 'md',
+                },
+                {
+                    type: 'separator',
+                    margin: 'lg',
+                },
+                {
+                    type: 'text',
+                    text: '🛠️ 系統開發與聲明',
+                    size: 'lg',
+                    weight: 'bold',
+                    color: theme.colors.accent,
+                    margin: 'lg',
+                },
+                {
+                    type: 'text',
+                    text: '本系統為「東澤」個人利用勤餘時間開發。\n特別感謝「新化分局交通組、交通分隊全體同仁」協助測試與驗證。',
                     size: 'sm',
                     color: theme.colors.text,
                     wrap: true,
@@ -84,5 +104,5 @@ module.exports = async function HandleFollow(context) {
         },
     };
 
-    await context.replyFlex('歡迎使用青雲律令', welcomeBubble);
+    await context.replyFlex('歡迎使用淺山執法通', welcomeBubble);
 };
