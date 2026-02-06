@@ -51,6 +51,8 @@ async function App(context) {
 
         // Default Fallback
         text('*', HandleHome),
+        // Catch-all for any other event types (sticker, image, etc.)
+        route('*', HandleHome),
     ]);
 }
 
