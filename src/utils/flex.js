@@ -104,7 +104,7 @@ const createMenu = () => {
                     { type: 'separator', margin: 'md' },
                     {
                         type: 'text',
-                        text: '免責聲明：本系統由個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前(違規申訴、舉發)，務必再次確認是否符合要件，或洽詢該管交通組/裁決中心。附上全國法規資料庫道路交通處罰條例連結https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=K0040012',
+                        text: '免責聲明：本系統由個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前(違規申訴、舉發)，務必再次確認是否符合要件，或洽詢該管交通組/裁決中心。',
                         color: '#aaaaaa',
                         size: 'xxs',
                         wrap: true,
@@ -357,7 +357,7 @@ const createResult = (title, article, fineText, additionalCitations, annotations
     contents.push({ type: 'separator', margin: 'lg' });
     contents.push({
         type: 'text',
-        text: '免責聲明：本系統由個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前(違規申訴、舉發)，務必再次確認是否符合要件，或洽詢該管交通組/裁決中心。附上全國法規資料庫道路交通處罰條例連結https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=K0040012',
+        text: '免責聲明：本系統由個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前(違規申訴、舉發)，務必再次確認是否符合要件，或洽詢該管交通組/裁決中心。',
         color: '#aaaaaa',
         size: 'xxs',
         wrap: true,
@@ -544,7 +544,7 @@ const createOverloadResult = (authorized, actual, overloadWeight, overloadPercen
     contents.push({ type: 'separator', margin: 'lg' });
     contents.push({
         type: 'text',
-        text: '免責聲明：本系統由個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前(違規申訴、舉發)，務必再次確認是否符合要件，或洽詢該管交通組/裁決中心。附上全國法規資料庫道路交通處罰條例連結https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=K0040012',
+        text: '免責聲明：本系統由個人開發，僅供參考。內容無法保證完全無誤，參照作執勤用途前(違規申訴、舉發)，務必再次確認是否符合要件，或洽詢該管交通組/裁決中心。',
         color: '#aaaaaa',
         size: 'xxs',
         wrap: true,
