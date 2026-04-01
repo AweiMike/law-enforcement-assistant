@@ -10,7 +10,7 @@ module.exports = async function HandleOthers(context) {
             createSelection('其他違規 (改裝/慢車/加重)', '請選擇類別', [
                 { label: '🚲 微型電動二輪車 (72條)', data: 'others_ebike' },
                 { label: '🚶 行人違規 (78、80條)', data: 'others_pedestrian' },
-                { label: '🔊 排氣管改裝 (16條) ✅已施行', data: 'others_exhaust' },
+                { label: '🔊 排氣管/噪音設備 (16條) ✅已施行', data: 'others_exhaust' },
                 { label: '⚖️ 加重刑責事由 (86條) 🆕', data: 'others_aggravated' },
             ])
         );
@@ -73,26 +73,92 @@ module.exports = async function HandleOthers(context) {
                 )
             );
         } else if (type === 'exhaust') {
+            // Sub-menu for Article 16 exhaust/noise violations
+            await context.replyFlex(
+                '排氣管/噪音設備 - 態樣',
+                createSelection('第16條 排氣管/噪音設備', '請選擇違規態樣', [
+                    { label: '🔧 非原型式排氣管未申報登記 🆕', data: 'others_exh-unreg' },
+                    { label: '💨 排氣管/消音器設備不全或損壞', data: 'others_exh-damage' },
+                    { label: '📢 高音量喇叭/噪音器物', data: 'others_exh-horn' },
+                ])
+            );
+            return;
+        } else if (payload === 'others_exh-unreg') {
             const article = {
-                code: '16條',
-                description: '排氣管改裝（噪音管制）— 115/3/31 起施行'
+                code: '16條第2項',
+                description: '非原型式排氣管不依規定申報異動登記'
             };
-            const fineText = '處新臺幣 1,800～5,400 元罰鍰';
+            const fineText = '處汽車所有人新臺幣 3,600 元（最高額加倍）';
             const additionalCitations = [
-                '責令改正並限期至指定檢驗機構檢驗',
-                '未依限改正覆驗合格者，得扣繳牌照',
-                '噪音管制法仍併行適用（可通報環保局）'
+                '責令15日內至指定機構檢驗（公路監理機關得收取檢驗費）',
+                '逾期15日以上 → 吊扣牌照（至檢驗合格後發還）',
+                '逾期2個月以上 → 註銷牌照',
+                '⚠️ 處罰對象為「汽車所有人」非駕駛人'
             ];
             const annotations = [
                 '115/3/31 起施行（行政院院臺交字第1151007003A號）',
                 '114年11月19日修正公布',
+                '本項為第16條第1項第1款之特別規定，針對「非原型式排氣管」未申報異動登記，按最高額(1,800元)加倍處罰',
+                '噪音管制法仍併行適用（可通報環保局）'
+            ];
+
+            await context.replyFlex(
+                '非原型式排氣管 - 執法結果',
+                createResult(
+                    '排氣管速查',
+                    article,
+                    fineText,
+                    additionalCitations,
+                    annotations,
+                    null
+                )
+            );
+        } else if (payload === 'others_exh-damage') {
+            const article = {
+                code: '16條第1項第2款',
+                description: '排氣管、消音器設備不全或損壞不予修復，或擅自增、減、變更原有規格致影響行車安全'
+            };
+            const fineText = '處汽車所有人新臺幣 900～1,800 元罰鍰';
+            const additionalCitations = [
+                '責令改正',
+                '⚠️ 處罰對象為「汽車所有人」非駕駛人',
+                '含「擅自增減變更原有規格」之情形'
+            ];
+            const annotations = [
+                '本款亦涵蓋：除頭燈外之燈光、雨刮、喇叭、照後鏡等設備不全或損壞',
                 '參考資料：駕照及車種違規舉發對照表（114年11月6日修正）'
             ];
 
             await context.replyFlex(
-                '排氣管改裝 - 執法結果',
+                '排氣管設備不全 - 執法結果',
                 createResult(
-                    '排氣管改裝速查',
+                    '排氣管速查',
+                    article,
+                    fineText,
+                    additionalCitations,
+                    annotations,
+                    null
+                )
+            );
+        } else if (payload === 'others_exh-horn') {
+            const article = {
+                code: '16條第1項第6款',
+                description: '裝置高音量或發出不合規定音調之喇叭或其他產生噪音器物'
+            };
+            const fineText = '處汽車所有人新臺幣 1,800 元（依最高額處罰）';
+            const additionalCitations = [
+                '高音量喇叭或噪音器物應沒入',
+                '⚠️ 處罰對象為「汽車所有人」非駕駛人'
+            ];
+            const annotations = [
+                '本款依法應按最高額處罰，且噪音器物「應」沒入（非得沒入）',
+                '噪音管制法仍併行適用（可通報環保局）'
+            ];
+
+            await context.replyFlex(
+                '高音量喇叭/噪音器物 - 執法結果',
+                createResult(
+                    '噪音設備速查',
                     article,
                     fineText,
                     additionalCitations,
