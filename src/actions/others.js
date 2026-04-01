@@ -93,7 +93,7 @@ module.exports = async function HandleOthers(context) {
                 '責令15日內至指定機構檢驗（公路監理機關得收取檢驗費）',
                 '逾期15日以上 → 吊扣牌照（至檢驗合格後發還）',
                 '逾期2個月以上 → 註銷牌照',
-                '⚠️ 處罰對象為「汽車所有人」非駕駛人'
+                '⚠️ 處罰對象為「汽車所有人」非駕駛人（本條例「汽車」含機車）'
             ];
             const annotations = [
                 '115/3/31 起施行（行政院院臺交字第1151007003A號）',
@@ -121,7 +121,7 @@ module.exports = async function HandleOthers(context) {
             const fineText = '處汽車所有人新臺幣 900～1,800 元罰鍰';
             const additionalCitations = [
                 '責令改正',
-                '⚠️ 處罰對象為「汽車所有人」非駕駛人',
+                '⚠️ 處罰對象為「汽車所有人」非駕駛人（本條例「汽車」含機車）',
                 '含「擅自增減變更原有規格」之情形'
             ];
             const annotations = [
@@ -148,7 +148,7 @@ module.exports = async function HandleOthers(context) {
             const fineText = '處汽車所有人新臺幣 1,800 元（依最高額處罰）';
             const additionalCitations = [
                 '高音量喇叭或噪音器物應沒入',
-                '⚠️ 處罰對象為「汽車所有人」非駕駛人'
+                '⚠️ 處罰對象為「汽車所有人」非駕駛人（本條例「汽車」含機車）'
             ];
             const annotations = [
                 '本款依法應按最高額處罰，且噪音器物「應」沒入（非得沒入）',
