@@ -13,9 +13,27 @@ const HandleDistracted = require('./src/actions/distracted');
 const HandleExhaust = require('./src/actions/exhaust');
 const HandleAggravated = require('./src/actions/aggravated');
 
+// Show loading animation so user knows the bot received their input
+async function showLoading(context) {
+    try {
+        const userId = context.session?.user?.id;
+        if (userId) {
+            await context.client.axios.post('/v2/bot/chat/loading', {
+                chatId: userId,
+                loadingSeconds: 10, // auto-dismisses when reply is sent
+            });
+        }
+    } catch (e) {
+        // silently ignore - loading animation is non-critical
+    }
+}
+
 // Simple router to delegate based on payload
 // For complex flows, individual actions will handle their own state
 async function App(context) {
+    // Immediately show loading animation for user feedback
+    await showLoading(context);
+
     return router([
         // Follow Event (User adds bot as friend)
         route(context => context.event.isFollow, HandleFollow),
