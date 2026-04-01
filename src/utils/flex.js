@@ -77,9 +77,23 @@ const createMenu = () => {
                     },
                     {
                         type: 'button',
+                        style: 'primary',
+                        color: '#8B4513', // SaddleBrown
+                        action: { type: 'postback', label: '🔊 排氣管/噪音 (16條) 🆕', data: 'module=exhaust' },
+                        height: 'sm',
+                    },
+                    {
+                        type: 'button',
                         style: 'secondary',
                         color: theme.colors.warning,
-                        action: { type: 'postback', label: '🔧 其他/改裝/加重 (72/86條)', data: 'module=others' },
+                        action: { type: 'postback', label: '🚲 慢車/行人 (72/78/80條)', data: 'module=others' },
+                        height: 'sm',
+                    },
+                    {
+                        type: 'button',
+                        style: 'secondary',
+                        color: theme.colors.subtext,
+                        action: { type: 'postback', label: '⚖️ 加重刑責 (86條) 🆕', data: 'module=aggravated' },
                         height: 'sm',
                     },
                     {

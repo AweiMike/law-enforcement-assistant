@@ -10,6 +10,8 @@ const HandleOthers = require('./src/actions/others');
 const HandleTools = require('./src/actions/tools');
 const HandleOverload = require('./src/actions/overload');
 const HandleDistracted = require('./src/actions/distracted');
+const HandleExhaust = require('./src/actions/exhaust');
+const HandleAggravated = require('./src/actions/aggravated');
 
 // Simple router to delegate based on payload
 // For complex flows, individual actions will handle their own state
@@ -25,6 +27,13 @@ async function App(context) {
         // Module: Distracted Driving (31-1)
         route(context => context.event.isPostback && context.event.payload.startsWith('module=distracted'), HandleDistracted),
         route(context => context.event.isPostback && context.event.payload.startsWith('distracted_'), HandleDistracted),
+
+        // Module: Exhaust / Noise (16)
+        route(context => context.event.isPostback && context.event.payload.startsWith('module=exhaust'), HandleExhaust),
+        route(context => context.event.isPostback && context.event.payload.startsWith('exhaust_'), HandleExhaust),
+
+        // Module: Aggravated Liability (86)
+        route(context => context.event.isPostback && context.event.payload === 'module=aggravated', HandleAggravated),
 
         // Module: Overload Calculator
         route(context => context.event.isPostback && context.event.payload.startsWith('module=overload'), HandleOverload),
