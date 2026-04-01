@@ -40,7 +40,7 @@ const createBubble = (title, subtitle, contents, footer) => {
 const createMenu = () => {
     return createBubble(
         '📜 淺山執法通',
-        '請選擇違規樣態 (適用115/1/31後新制)',
+        '請選擇違規樣態 (115/1/31新制＋3/31增修)',
         [
             {
                 type: 'box',
@@ -70,9 +70,16 @@ const createMenu = () => {
                     },
                     {
                         type: 'button',
+                        style: 'primary',
+                        color: '#FF8C00', // DarkOrange
+                        action: { type: 'postback', label: '📱 手持裝置/吸菸 (31-1) 🆕', data: 'module=distracted' },
+                        height: 'sm',
+                    },
+                    {
+                        type: 'button',
                         style: 'secondary',
                         color: theme.colors.warning,
-                        action: { type: 'postback', label: '🔧 其他/改裝 (72條)', data: 'module=others' },
+                        action: { type: 'postback', label: '🔧 其他/改裝/加重 (72/86條)', data: 'module=others' },
                         height: 'sm',
                     },
                     {
@@ -95,11 +102,19 @@ const createMenu = () => {
                     },
                     {
                         type: 'text',
-                        text: '⚠️ 注意：本系統適用 115/1/31 後新制，強制抽血與排氣管扣牌尚未生效。',
-                        color: theme.colors.warning,
+                        text: '🆕 115/3/31 更新：第16條(排氣管)、31-1條(手持裝置/吸菸)、86條(加重刑責)、90條(舉發時效) 已施行上路。',
+                        color: theme.colors.success,
                         size: 'xs',
                         wrap: true,
                         margin: 'md',
+                    },
+                    {
+                        type: 'text',
+                        text: '⚠️ 注意：強制抽血程序仍依舊制（報請檢察官核發許可書）。',
+                        color: theme.colors.warning,
+                        size: 'xs',
+                        wrap: true,
+                        margin: 'sm',
                     },
                     { type: 'separator', margin: 'md' },
                     {

@@ -9,6 +9,7 @@ const HandleYield = require('./src/actions/yield');
 const HandleOthers = require('./src/actions/others');
 const HandleTools = require('./src/actions/tools');
 const HandleOverload = require('./src/actions/overload');
+const HandleDistracted = require('./src/actions/distracted');
 
 // Simple router to delegate based on payload
 // For complex flows, individual actions will handle their own state
@@ -20,6 +21,10 @@ async function App(context) {
         // Home / Reset
         text(['hi', 'hello', '開始', 'menu', '主選單'], HandleHome),
         route(context => context.event.isPostback && context.event.payload === 'action=restart', HandleHome),
+
+        // Module: Distracted Driving (31-1)
+        route(context => context.event.isPostback && context.event.payload.startsWith('module=distracted'), HandleDistracted),
+        route(context => context.event.isPostback && context.event.payload.startsWith('distracted_'), HandleDistracted),
 
         // Module: Overload Calculator
         route(context => context.event.isPostback && context.event.payload.startsWith('module=overload'), HandleOverload),

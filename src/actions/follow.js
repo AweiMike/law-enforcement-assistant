@@ -49,6 +49,26 @@ module.exports = async function HandleFollow(context) {
                 },
                 {
                     type: 'text',
+                    text: '🆕 115/3/31 更新公告',
+                    size: 'lg',
+                    weight: 'bold',
+                    color: theme.colors.success,
+                    margin: 'lg',
+                },
+                {
+                    type: 'text',
+                    text: '行政院核定以下條文自115年3月31日起施行：\n• 第16條：排氣管改裝扣牌（已上路）\n• 第31-1條：手持手機/吸菸罰鍰提高\n• 第86條：新增學校醫院路段加重刑責\n• 第90條：毒駕舉發時效起算日明定',
+                    size: 'sm',
+                    color: theme.colors.text,
+                    wrap: true,
+                    margin: 'md',
+                },
+                {
+                    type: 'separator',
+                    margin: 'lg',
+                },
+                {
+                    type: 'text',
                     text: '⚠️ 非公務正式系統',
                     size: 'lg',
                     weight: 'bold',
